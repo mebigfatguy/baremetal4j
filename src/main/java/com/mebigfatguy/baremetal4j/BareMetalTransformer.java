@@ -21,6 +21,10 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+
 public class BareMetalTransformer implements ClassFileTransformer {
 
     private Options options;
@@ -38,9 +42,12 @@ public class BareMetalTransformer implements ClassFileTransformer {
             return classfileBuffer;
         }
 
-        // temporary
-        return classfileBuffer;
+        ClassReader cr = new ClassReader(classfileBuffer);
+        ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+        ClassVisitor stackTraceVisitor = new BareMetalClassVisitor(cw, options);
+        cr.accept(stackTraceVisitor, ClassReader.EXPAND_FRAMES);
 
+        return cw.toByteArray();
     }
 
     @Override
