@@ -59,7 +59,7 @@ public final class ToString {
 
         StringBuilder sb = new StringBuilder(100);
         Class<?> cls = o.getClass();
-        int identityHC = System.identityHashCode(o);
+        Integer identityHC = Integer.valueOf(System.identityHashCode(o));
         sb.append(cls.getSimpleName()).append('[').append(identityHC).append("]{");
 
         if (!visitedObjects.contains(identityHC)) {
