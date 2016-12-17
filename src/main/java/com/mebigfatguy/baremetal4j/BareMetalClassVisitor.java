@@ -17,15 +17,19 @@
  */
 package com.mebigfatguy.baremetal4j;
 
+import java.io.Closeable;
+import java.io.PrintWriter;
+
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-public class BareMetalClassVisitor extends ClassVisitor {
+public class BareMetalClassVisitor extends ClassVisitor implements Closeable {
 
     private ClassWriter cw;
     private Options options;
+    private PrintWriter sourceWriter;
 
     public BareMetalClassVisitor(ClassWriter cw, Options options) {
         super(Opcodes.ASM5);
@@ -34,7 +38,16 @@ public class BareMetalClassVisitor extends ClassVisitor {
     }
 
     @Override
+    public void close() {
+        if (sourceWriter != null) {
+            sourceWriter.close();
+        }
+    }
+
+    @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+
+        sourceWriter = SourceWriterFactory.get(name, options);
     }
 
     @Override

@@ -22,7 +22,6 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 
 public class BareMetalTransformer implements ClassFileTransformer {
@@ -44,8 +43,9 @@ public class BareMetalTransformer implements ClassFileTransformer {
 
         ClassReader cr = new ClassReader(classfileBuffer);
         ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-        ClassVisitor stackTraceVisitor = new BareMetalClassVisitor(cw, options);
-        cr.accept(stackTraceVisitor, ClassReader.EXPAND_FRAMES);
+        try (BareMetalClassVisitor stackTraceVisitor = new BareMetalClassVisitor(cw, options)) {
+            cr.accept(stackTraceVisitor, ClassReader.EXPAND_FRAMES);
+        }
 
         return cw.toByteArray();
     }
