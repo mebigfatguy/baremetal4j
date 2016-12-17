@@ -25,10 +25,12 @@ public class Options {
     private static final String APPLY_ALL_NAME = "apply_all";
     private static final String EXCLUSION_PATTERN_NAME = "exclusion_pattern";
     private static final String INCLUSION_PATTERN_NAME = "inclusion_pattern";
+    private static final String SOURCE_PATH = "source_path";
 
     private boolean applyAll;
     private Pattern classExclusionPattern;
     private Pattern classInclusionPattern;
+    private String sourcePath;
 
     public Options(String agentArgs) {
         if (agentArgs != null) {
@@ -50,6 +52,9 @@ public class Options {
                         case INCLUSION_PATTERN_NAME:
                             classInclusionPattern = Pattern.compile(kv[1].trim());
                         break;
+
+                        case SOURCE_PATH:
+                            sourcePath = kv[1].trim();
                     }
                 } catch (Exception e) {
                     // swallow it
@@ -77,6 +82,10 @@ public class Options {
         }
 
         return instrument;
+    }
+
+    public String getSourcePath() {
+        return sourcePath;
     }
 
     @Override
