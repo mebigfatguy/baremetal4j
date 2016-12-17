@@ -69,19 +69,21 @@ public class Options {
             return true;
         }
 
-        boolean instrument = true;
-
         if (classExclusionPattern != null) {
             Matcher m = classExclusionPattern.matcher(className);
-            instrument = !m.matches();
+            if (m.matches()) {
+                return false;
+            }
         }
 
         if (classInclusionPattern != null) {
             Matcher m = classInclusionPattern.matcher(className);
-            instrument = m.matches();
+            if (m.matches()) {
+                return true;
+            }
         }
 
-        return instrument;
+        return (classExclusionPattern == null) && (classInclusionPattern == null);
     }
 
     public String getSourcePath() {
