@@ -53,6 +53,7 @@ public class BareMetalClassVisitor extends ClassVisitor implements Closeable {
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
 
         textifier.visit(version, access, name, signature, superName, interfaces);
+        super.visit(version, access, name, signature, superName, interfaces);
         clsName = name;
 
     }
@@ -60,12 +61,15 @@ public class BareMetalClassVisitor extends ClassVisitor implements Closeable {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         textifier.visitMethod(access, name, desc, signature, exceptions);
+        super.visitMethod(access, name, desc, signature, exceptions);
         return new BareMetalMethodVisitor(cw, options, textifier);
     }
 
     @Override
     public void visitEnd() {
         textifier.visitClassEnd();
+        super.visitSource(SourceWriterFactory.name(clsName, options), null);
+        super.visitEnd();
         try (PrintWriter sourceWriter = SourceWriterFactory.get(clsName, options)) {
             textifier.print(sourceWriter);
         } catch (IOException e) {

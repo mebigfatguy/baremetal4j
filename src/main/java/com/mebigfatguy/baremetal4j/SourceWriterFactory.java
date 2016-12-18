@@ -29,12 +29,16 @@ public final class SourceWriterFactory {
     private SourceWriterFactory() {
     }
 
+    public static String name(String clsName, Options options) {
+        File f = new File(options.getSourcePath(), clsName.replace('.', '/') + ".java");
+        return f.getName();
+    }
+
     public static PrintWriter get(String clsName, Options options) throws IOException {
         File f = new File(options.getSourcePath(), clsName.replace('.', '/') + ".java");
         f.getParentFile().mkdirs();
 
         FileOutputStream fos = new FileOutputStream(f);
         return new PrintWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8));
-
     }
 }

@@ -45,7 +45,7 @@ public class BareMetalMethodVisitor extends MethodVisitor {
     @Override
     public void visitCode() {
         textifier.visitCode();
-        super.visitEnd();
+        super.visitCode();
     }
 
     @Override
