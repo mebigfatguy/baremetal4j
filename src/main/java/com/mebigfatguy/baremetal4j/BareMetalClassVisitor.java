@@ -58,11 +58,13 @@ public class BareMetalClassVisitor extends ClassVisitor implements Closeable {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        return new BareMetalMethodVisitor(cw, options);
+        textifier.visitMethod(access, name, desc, signature, exceptions);
+        return new BareMetalMethodVisitor(cw, options, textifier);
     }
 
     @Override
     public void visitEnd() {
+        textifier.visitClassEnd();
         try (PrintWriter sourceWriter = SourceWriterFactory.get(clsName, options)) {
             textifier.print(sourceWriter);
         }

@@ -34,4 +34,10 @@ public class BareMetalMethodVisitor extends MethodVisitor {
         this.options = options;
         this.textifier = textifier;
     }
+
+    @Override
+    public void visitEnd() {
+        textifier.visitMethodEnd();
+    }
+
 }
