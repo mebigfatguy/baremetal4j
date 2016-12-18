@@ -156,7 +156,6 @@ public class BareMetalMethodVisitor extends MethodVisitor {
     }
 
     private void injectLineNumber() {
-        injectLineNumber();
         Label l = new Label();
         super.visitLabel(l);
         super.visitLineNumber(textifier.getText().size(), l);
