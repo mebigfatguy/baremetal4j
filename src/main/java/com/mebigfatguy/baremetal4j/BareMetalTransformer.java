@@ -36,8 +36,8 @@ public class BareMetalTransformer implements ClassFileTransformer {
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer)
             throws IllegalClassFormatException {
 
-        if (className.startsWith("java/") || className.startsWith("javax/") || className.startsWith("sun/")
-                || className.startsWith("com/mebigfatguy/baremetal4j") || !options.instrumentClass(className)) {
+        if (className.startsWith("java/") || className.startsWith("javax/") || className.startsWith("sun/") || className.startsWith("com/mebigfatguy/")
+                || !options.instrumentClass(className)) {
             return classfileBuffer;
         }
 
