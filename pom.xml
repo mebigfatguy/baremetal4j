@@ -92,7 +92,7 @@
 					<configuration>
 						<archive>
 							<manifestEntries>
-								<Premain-Class>com.mebigfatuy.baremetal4j.BareMetalAgent</Premain-Class>
+								<Premain-Class>com.mebigfatguy.baremetal4j.BareMetalAgent</Premain-Class>
 								<git-revision>${scmBranch} ${buildNumber}</git-revision>
 								<Bundle-ManifestVersion>2</Bundle-ManifestVersion>
 								<Bundle-Name>baremetal4j</Bundle-Name>
