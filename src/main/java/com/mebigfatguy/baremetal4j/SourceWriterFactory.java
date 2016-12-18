@@ -17,14 +17,24 @@
  */
 package com.mebigfatguy.baremetal4j;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 public final class SourceWriterFactory {
 
     private SourceWriterFactory() {
     }
 
-    public static PrintWriter get(String clsName, Options options) {
-        return null;
+    public static PrintWriter get(String clsName, Options options) throws IOException {
+        File f = new File(options.getSourcePath(), clsName.replace('.', '/'));
+        f.getParentFile().mkdirs();
+
+        FileOutputStream fos = new FileOutputStream(f);
+        return new PrintWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8));
+
     }
 }

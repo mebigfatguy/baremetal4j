@@ -18,6 +18,7 @@
 package com.mebigfatguy.baremetal4j;
 
 import java.io.Closeable;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.objectweb.asm.ClassVisitor;
@@ -67,7 +68,8 @@ public class BareMetalClassVisitor extends ClassVisitor implements Closeable {
         textifier.visitClassEnd();
         try (PrintWriter sourceWriter = SourceWriterFactory.get(clsName, options)) {
             textifier.print(sourceWriter);
+        } catch (IOException e) {
+            // log somehow
         }
     }
-
 }
