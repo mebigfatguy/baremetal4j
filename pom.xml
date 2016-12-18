@@ -52,14 +52,14 @@
 	<dependencies>
 	<dependency>
 		<groupId>org.ow2.asm</groupId>
-		<artifactId>asm</artifactId>
+		<artifactId>asm-debug-all</artifactId>
 		<version>5.1</version>
 	</dependency>
-	<dependency>
-		<groupId>org.ow2.asm</groupId>
-		<artifactId>asm-util</artifactId>
-		<version>5.1</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 		<groupId>org.ow2.asm</groupId> -->
+<!-- 		<artifactId>asm-util</artifactId> -->
+<!-- 		<version>5.1</version> -->
+<!-- 	</dependency> -->
 	</dependencies>
 
 	<build>
