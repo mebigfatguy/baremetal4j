@@ -167,7 +167,7 @@
 					<relocations>
 						<relocation>
 							<pattern>org.objectweb.asm</pattern>
-							<shadedPattern>com.mebigfatguy.org.objectweb.asm</shadedPattern>
+							<shadedPattern>com.mebigfatguy.baremetal4j.org.objectweb.asm</shadedPattern>
 						</relocation>
 					</relocations>
 				</configuration>
