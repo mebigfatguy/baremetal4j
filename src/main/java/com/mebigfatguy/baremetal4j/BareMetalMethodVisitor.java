@@ -20,15 +20,18 @@ package com.mebigfatguy.baremetal4j;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.util.Textifier;
 
 public class BareMetalMethodVisitor extends MethodVisitor {
 
     private ClassWriter cw;
     private Options options;
+    private Textifier textifier;
 
-    public BareMetalMethodVisitor(ClassWriter cw, Options options) {
+    public BareMetalMethodVisitor(ClassWriter cw, Options options, Textifier textifier) {
         super(Opcodes.ASM5);
         this.cw = cw;
         this.options = options;
+        this.textifier = textifier;
     }
 }

@@ -24,17 +24,21 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.util.Textifier;
 
 public class BareMetalClassVisitor extends ClassVisitor implements Closeable {
 
     private ClassWriter cw;
     private Options options;
+    private Textifier textifier;
     private PrintWriter sourceWriter;
+    private String clsName;
 
     public BareMetalClassVisitor(ClassWriter cw, Options options) {
         super(Opcodes.ASM5);
         this.cw = cw;
         this.options = options;
+        textifier = new Textifier();
     }
 
     @Override
@@ -47,11 +51,21 @@ public class BareMetalClassVisitor extends ClassVisitor implements Closeable {
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
 
-        sourceWriter = SourceWriterFactory.get(name, options);
+        textifier.visit(version, access, name, signature, superName, interfaces);
+        clsName = name;
+
     }
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         return new BareMetalMethodVisitor(cw, options);
     }
+
+    @Override
+    public void visitEnd() {
+        try (PrintWriter sourceWriter = SourceWriterFactory.get(clsName, options)) {
+            textifier.print(sourceWriter);
+        }
+    }
+
 }
