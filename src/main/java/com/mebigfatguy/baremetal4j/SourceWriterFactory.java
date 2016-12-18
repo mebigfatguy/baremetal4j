@@ -30,7 +30,7 @@ public final class SourceWriterFactory {
     }
 
     public static PrintWriter get(String clsName, Options options) throws IOException {
-        File f = new File(options.getSourcePath(), clsName.replace('.', '/'));
+        File f = new File(options.getSourcePath(), clsName.replace('.', '/') + ".java");
         f.getParentFile().mkdirs();
 
         FileOutputStream fos = new FileOutputStream(f);
