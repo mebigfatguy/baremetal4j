@@ -17,6 +17,8 @@
  */
 package com.mebigfatguy.baremetal4j;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
@@ -48,10 +50,10 @@ public class BareMetalTransformer implements ClassFileTransformer {
 
         byte[] transformedClass = cw.toByteArray();
 
-        // try (FileOutputStream fos = new FileOutputStream("/tmp/" + className + ".class")) {
-        // fos.write(transformedClass);
-        // } catch (IOException e) {
-        // }
+        try (FileOutputStream fos = new FileOutputStream("/tmp/" + className + ".class")) {
+            fos.write(transformedClass);
+        } catch (IOException e) {
+        }
 
         return transformedClass;
     }

@@ -28,8 +28,8 @@ public class BareMetalMethodVisitor extends MethodVisitor {
     private Options options;
     private Textifier textifier;
 
-    public BareMetalMethodVisitor(Options options, Textifier textifier) {
-        super(Opcodes.ASM5);
+    public BareMetalMethodVisitor(MethodVisitor mv, Options options, Textifier textifier) {
+        super(Opcodes.ASM5, mv);
         this.options = options;
         this.textifier = textifier;
     }
