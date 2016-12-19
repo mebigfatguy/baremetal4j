@@ -28,14 +28,12 @@ import org.objectweb.asm.util.Textifier;
 
 public class BareMetalClassVisitor extends ClassVisitor {
 
-    private ClassWriter cw;
     private Options options;
     private Textifier textifier;
     private String clsName;
 
     public BareMetalClassVisitor(ClassWriter cw, Options options) {
         super(Opcodes.ASM5, cw);
-        this.cw = cw;
         this.options = options;
         textifier = new Textifier();
     }
@@ -51,7 +49,7 @@ public class BareMetalClassVisitor extends ClassVisitor {
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         textifier.visitMethod(access, name, desc, signature, exceptions);
         super.visitMethod(access, name, desc, signature, exceptions);
-        return new BareMetalMethodVisitor(cw, options, textifier);
+        return new BareMetalMethodVisitor(options, textifier);
     }
 
     @Override
