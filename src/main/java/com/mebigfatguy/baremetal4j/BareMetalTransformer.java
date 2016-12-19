@@ -43,9 +43,8 @@ public class BareMetalTransformer implements ClassFileTransformer {
 
         ClassReader cr = new ClassReader(classfileBuffer);
         ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-        try (BareMetalClassVisitor stackTraceVisitor = new BareMetalClassVisitor(cw, options)) {
-            cr.accept(stackTraceVisitor, ClassReader.EXPAND_FRAMES);
-        }
+        BareMetalClassVisitor stackTraceVisitor = new BareMetalClassVisitor(cw, options);
+        cr.accept(stackTraceVisitor, ClassReader.EXPAND_FRAMES);
 
         byte[] transformedClass = cw.toByteArray();
 

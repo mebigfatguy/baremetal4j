@@ -17,7 +17,6 @@
  */
 package com.mebigfatguy.baremetal4j;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -27,12 +26,11 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.util.Textifier;
 
-public class BareMetalClassVisitor extends ClassVisitor implements Closeable {
+public class BareMetalClassVisitor extends ClassVisitor {
 
     private ClassWriter cw;
     private Options options;
     private Textifier textifier;
-    private PrintWriter sourceWriter;
     private String clsName;
 
     public BareMetalClassVisitor(ClassWriter cw, Options options) {
@@ -40,13 +38,6 @@ public class BareMetalClassVisitor extends ClassVisitor implements Closeable {
         this.cw = cw;
         this.options = options;
         textifier = new Textifier();
-    }
-
-    @Override
-    public void close() {
-        if (sourceWriter != null) {
-            sourceWriter.close();
-        }
     }
 
     @Override
