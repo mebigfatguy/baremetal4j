@@ -47,7 +47,14 @@ public class BareMetalTransformer implements ClassFileTransformer {
             cr.accept(stackTraceVisitor, ClassReader.EXPAND_FRAMES);
         }
 
-        return cw.toByteArray();
+        byte[] transformedClass = cw.toByteArray();
+
+        // try (FileOutputStream fos = new FileOutputStream("/tmp/" + className + ".class")) {
+        // fos.write(transformedClass);
+        // } catch (IOException e) {
+        // }
+
+        return transformedClass;
     }
 
     @Override

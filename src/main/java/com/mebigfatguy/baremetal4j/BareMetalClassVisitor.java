@@ -36,7 +36,7 @@ public class BareMetalClassVisitor extends ClassVisitor implements Closeable {
     private String clsName;
 
     public BareMetalClassVisitor(ClassWriter cw, Options options) {
-        super(Opcodes.ASM5);
+        super(Opcodes.ASM5, cw);
         this.cw = cw;
         this.options = options;
         textifier = new Textifier();
@@ -51,11 +51,9 @@ public class BareMetalClassVisitor extends ClassVisitor implements Closeable {
 
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-
         textifier.visit(version, access, name, signature, superName, interfaces);
         super.visit(version, access, name, signature, superName, interfaces);
         clsName = name;
-
     }
 
     @Override
