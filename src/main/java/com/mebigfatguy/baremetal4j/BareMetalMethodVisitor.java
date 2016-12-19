@@ -17,6 +17,8 @@
  */
 package com.mebigfatguy.baremetal4j;
 
+import java.util.List;
+
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -147,7 +149,6 @@ public class BareMetalMethodVisitor extends MethodVisitor {
 
     @Override
     public void visitEnd() {
-        injectLineNumber();
         textifier.visitMethodEnd();
         super.visitEnd();
     }
@@ -155,7 +156,28 @@ public class BareMetalMethodVisitor extends MethodVisitor {
     private void injectLineNumber() {
         Label l = new Label();
         super.visitLabel(l);
-        super.visitLineNumber(textifier.getText().size(), l);
+        int len = countLines(textifier.getText());
+
+        super.visitLineNumber(len + 1, l);
+    }
+
+    private int countLines(List<Object> lines) {
+        int len = 0;
+        for (int i = 0; i < lines.size(); i++) {
+            Object o = lines.get(i);
+            if (o instanceof List) {
+                len += countLines((List<Object>) o);
+            } else {
+                String s = (String) o;
+                int nlPos = s.indexOf('\n');
+                while (nlPos >= 0) {
+                    len++;
+                    nlPos = s.indexOf('\n', nlPos + 1);
+                }
+            }
+        }
+
+        return len;
     }
 
 }
