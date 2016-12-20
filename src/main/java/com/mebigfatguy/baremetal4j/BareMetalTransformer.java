@@ -50,12 +50,16 @@ public class BareMetalTransformer implements ClassFileTransformer {
 
         byte[] transformedClass = cw.toByteArray();
 
-        try (FileOutputStream fos = new FileOutputStream("/tmp/" + className + ".class")) {
+        // dumpGeneratedClassFile(transformedClass, "/tmp/" + className + ".class");
+
+        return transformedClass;
+    }
+
+    private void dumpGeneratedClassFile(byte[] transformedClass, String name) {
+        try (FileOutputStream fos = new FileOutputStream(name)) {
             fos.write(transformedClass);
         } catch (IOException e) {
         }
-
-        return transformedClass;
     }
 
     @Override
