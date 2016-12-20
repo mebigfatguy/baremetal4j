@@ -1,5 +1,5 @@
 # baremetal4j
-A java aspect for allowing debugging at the byte code level from source debuggers (as in IDEs)
+A java agent for allowing debugging at the byte code level from source debuggers (as in IDEs)
 
 A work in progress, not ready for use as of yet.
 
