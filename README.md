@@ -3,8 +3,8 @@ A java aspect for allowing debugging at the byte code level from source debugger
 
 A work in progress, not ready for use as of yet.
 
-This java agent rewrites classes on load so that you can step through methods at the byte code level. It generates 'source' files 
-that resemble javap output, to use as source.
+This java agent rewrites classes on load so that you can step through methods at the byte code level. 
+It generates 'source' files that resemble javap output, to use as source.
 
 To use, do
 
@@ -18,4 +18,7 @@ Where the options you can pass are
     
     exclusion_pattern={a regex pattern} - a pattern to choose fully qualified class names to reject
     
-    source_path={filename} - where to write the 'source' files.
+    source_path={dirName} - where to write the 'source' files.
+    
+    
+(if apply_all is set to true, the inclusion patterns are ignored)
