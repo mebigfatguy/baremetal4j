@@ -8,7 +8,7 @@ It generates 'source' files that resemble javap output, to use as source.
 
 To use, do
 
-java -javaagent:/path/to/baremetal4j-0.2.0.jar=apply_all=true;source_path=/tmp/bm
+    java -javaagent:/path/to/baremetal4j-0.2.0.jar=apply_all=true;source_path=/tmp/bm
 
 Where the options you can pass are
 
