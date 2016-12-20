@@ -1,0 +1,6 @@
+<Project projectName="baremetal4j">
+  <Jar>./target/classes</Jar>
+  <AuxClasspathEntry>../../.m2/repository/org/ow2/asm/asm/5.1/asm-5.1.jar</AuxClasspathEntry>
+  <AuxClasspathEntry>../../.m2/repository/org/ow2/asm/asm-util/5.1/asm-util-5.1.jar</AuxClasspathEntry>
+  <SrcDir>./src/main/java</SrcDir>
+</Project>
