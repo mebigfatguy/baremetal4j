@@ -27,12 +27,10 @@ import org.objectweb.asm.util.Textifier;
 
 public class BareMetalMethodVisitor extends MethodVisitor {
 
-    private Options options;
     private Textifier textifier;
 
-    public BareMetalMethodVisitor(MethodVisitor mv, Options options, Textifier textifier) {
+    public BareMetalMethodVisitor(MethodVisitor mv, Textifier textifier) {
         super(Opcodes.ASM5, mv);
-        this.options = options;
         this.textifier = textifier;
     }
 

@@ -49,7 +49,7 @@ public class BareMetalClassVisitor extends ClassVisitor {
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         textifier.visitMethod(access, name, desc, signature, exceptions);
         MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
-        return new BareMetalMethodVisitor(mv, options, textifier);
+        return new BareMetalMethodVisitor(mv, textifier);
     }
 
     @Override
