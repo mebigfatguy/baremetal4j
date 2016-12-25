@@ -2,6 +2,7 @@
 A java agent for allowing debugging at the byte code level from source debuggers (as in IDEs)
 
 A work in progress, not ready for use as of yet. To be done is producing a source file that Ides will accept as valid. 
+
 This java agent rewrites classes on load so that you can step through methods at the byte code level. 
 It generates 'source' files that resemble javap output, to use as source.
 
