@@ -97,7 +97,7 @@ public class Sourcifier {
     }
 
     public Sourcifier visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        lines.add("\t" + accessString(access) + " " + methodReturnType(desc) + " name" + argumentSignature(desc) + " {");
+        lines.add("\t" + accessString(access) + " " + methodReturnType(desc) + " " + name + argumentSignature(desc) + " {");
         lines.add("");
         lines.add("\t\tint BCO; // Byte Code Offset");
         byteOffset = 0;
@@ -242,6 +242,7 @@ public class Sourcifier {
 
     public void visitMethodEnd() {
         lines.add("\t}");
+        lines.add("");
     }
 
     public String accessString(int access) {
