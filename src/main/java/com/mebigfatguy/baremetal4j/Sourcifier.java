@@ -173,6 +173,9 @@ public class Sourcifier {
     }
 
     public void visitTypeInsn(int opcode, String type) {
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; //" + Printer.OPCODES[opcode] + " " + convertInternalType(new StringBuilder(type)));
+        byteOffset += 3;
+
     }
 
     public void visitFieldInsn(int opcode, String owner, String name, String desc) {
