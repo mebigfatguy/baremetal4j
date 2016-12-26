@@ -158,57 +158,77 @@ public class Sourcifier {
     }
 
     public void visitInsn(int opcode) {
-        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; //" + Printer.OPCODES[opcode]);
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode]);
         byteOffset++;
     }
 
     public void visitIntInsn(int opcode, int operand) {
-        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; //" + Printer.OPCODES[opcode] + " " + operand);
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode] + " " + operand);
         byteOffset += (opcode == Opcodes.SIPUSH) ? 3 : 2;
     }
 
     public void visitVarInsn(int opcode, int var) {
-        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; //" + Printer.OPCODES[opcode] + " " + var);
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode] + " " + var);
         byteOffset += 2;
     }
 
     public void visitTypeInsn(int opcode, String type) {
-        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; //" + Printer.OPCODES[opcode] + " " + convertInternalType(new StringBuilder(type)));
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode] + " " + convertInternalType(new StringBuilder(type)));
         byteOffset += 3;
 
     }
 
     public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode] + " " + owner.replace('/', '.') + "." + name);
+        byteOffset += 3;
     }
 
     public void visitMethodInsn(final int opcode, final String owner, final String name, final String desc, final boolean itf) {
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode] + "??");
+        byteOffset += 1;
     }
 
     public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[Opcodes.LDC] + "??");
+        byteOffset += 1;
     }
 
     public void visitJumpInsn(int opcode, Label label) {
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode] + " OFFSET[" + label.getOffset() + "]");
+        byteOffset += 3;
     }
 
     public void visitLabel(Label label) {
     }
 
     public void visitLdcInsn(Object cst) {
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[Opcodes.LDC] + " " + cst);
+        byteOffset += 2;
     }
 
     public void visitIincInsn(int var, int increment) {
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[Opcodes.IINC] + " " + var + ", increment");
+        byteOffset += 3;
     }
 
     public void visitTableSwitchInsn(int min, int max, Label dflt, Label... labels) {
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + "??");
+        byteOffset += 1;
     }
 
     public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels) {
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + "??");
+        byteOffset += 1;
     }
 
     public void visitMultiANewArrayInsn(String desc, int dims) {
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[Opcodes.MULTIANEWARRAY] + "??");
+        byteOffset += 1;
     }
 
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + "??");
+        byteOffset += 1;
     }
 
     public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
