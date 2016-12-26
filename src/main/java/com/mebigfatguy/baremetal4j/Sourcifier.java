@@ -25,10 +25,12 @@ import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.util.Printer;
 
 public class Sourcifier {
 
     private List<String> lines = new ArrayList<>();
+    private int byteOffset = 0;
 
     public int currentLine() {
         return lines.size() + 1;
@@ -57,7 +59,7 @@ public class Sourcifier {
             lines.add("package " + packageName + ";");
             lines.add("");
         }
-        lines.add(accessString(access) + " class " + className + "{");
+        lines.add(accessString(access) + " class " + className + " {");
     }
 
     public void visitSource(String source, String debug) {
@@ -82,6 +84,9 @@ public class Sourcifier {
 
     public Sourcifier visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         lines.add("\t" + accessString(access) + " name() {");
+        lines.add("");
+        lines.add("\t\tint BCO; // Byte Code Offset");
+        byteOffset = 0;
         return this;
     }
 
@@ -132,12 +137,15 @@ public class Sourcifier {
     }
 
     public void visitCode() {
+        lines.add("");
     }
 
     public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
     }
 
     public void visitInsn(int opcode) {
+        lines.add("\t\tBCO = " + byteOffset + "; //" + Printer.OPCODES[opcode]);
+        byteOffset++;
     }
 
     public void visitIntInsn(int opcode, int operand) {
