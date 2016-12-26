@@ -24,41 +24,40 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.util.Textifier;
 
 public class BareMetalClassVisitor extends ClassVisitor {
 
     private Options options;
-    private Textifier textifier;
+    private Sourcifier sourcifier;
     private String clsName;
 
     public BareMetalClassVisitor(ClassWriter cw, Options options) {
         super(Opcodes.ASM5, cw);
         this.options = options;
-        textifier = new Textifier();
+        sourcifier = new Sourcifier();
     }
 
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        textifier.visit(version, access, name, signature, superName, interfaces);
+        sourcifier.visit(version, access, name, signature, superName, interfaces);
         super.visit(version, access, name, signature, superName, interfaces);
         clsName = name;
     }
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        textifier.visitMethod(access, name, desc, signature, exceptions);
+        sourcifier.visitMethod(access, name, desc, signature, exceptions);
         MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
-        return new BareMetalMethodVisitor(mv, textifier);
+        return new BareMetalMethodVisitor(mv, sourcifier);
     }
 
     @Override
     public void visitEnd() {
-        textifier.visitClassEnd();
+        sourcifier.visitClassEnd();
         super.visitSource(SourceWriterFactory.name(clsName, options), null);
         super.visitEnd();
         try (PrintWriter sourceWriter = SourceWriterFactory.get(clsName, options)) {
-            textifier.print(sourceWriter);
+            sourcifier.print(sourceWriter);
         } catch (IOException e) {
             // log somehow
         }

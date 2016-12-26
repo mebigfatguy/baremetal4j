@@ -23,15 +23,14 @@ import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.util.Textifier;
 
 public class BareMetalMethodVisitor extends MethodVisitor {
 
-    private Textifier textifier;
+    private Sourcifier sourcifier;
 
-    public BareMetalMethodVisitor(MethodVisitor mv, Textifier textifier) {
+    public BareMetalMethodVisitor(MethodVisitor mv, Sourcifier sourcifier) {
         super(Opcodes.ASM5, mv);
-        this.textifier = textifier;
+        this.sourcifier = sourcifier;
     }
 
     @Override
@@ -41,7 +40,7 @@ public class BareMetalMethodVisitor extends MethodVisitor {
 
     @Override
     public void visitCode() {
-        textifier.visitCode();
+        sourcifier.visitCode();
         super.visitCode();
     }
 
@@ -49,63 +48,63 @@ public class BareMetalMethodVisitor extends MethodVisitor {
     public void visitFieldInsn(int opcode, String owner, String name, String desc) {
 
         injectLineNumber();
-        textifier.visitFieldInsn(opcode, owner, name, desc);
+        sourcifier.visitFieldInsn(opcode, owner, name, desc);
         super.visitFieldInsn(opcode, owner, name, desc);
     }
 
     @Override
     public void visitIincInsn(int var, int increment) {
         injectLineNumber();
-        textifier.visitIincInsn(var, increment);
+        sourcifier.visitIincInsn(var, increment);
         super.visitIincInsn(var, increment);
     }
 
     @Override
     public void visitInsn(int opcode) {
         injectLineNumber();
-        textifier.visitInsn(opcode);
+        sourcifier.visitInsn(opcode);
         super.visitInsn(opcode);
     }
 
     @Override
     public void visitIntInsn(int opcode, int operand) {
         injectLineNumber();
-        textifier.visitIntInsn(opcode, operand);
+        sourcifier.visitIntInsn(opcode, operand);
         super.visitIntInsn(opcode, operand);
     }
 
     @Override
     public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
         injectLineNumber();
-        textifier.visitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
+        sourcifier.visitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
         super.visitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
     }
 
     @Override
     public void visitJumpInsn(int opcode, Label label) {
         injectLineNumber();
-        textifier.visitJumpInsn(opcode, label);
+        sourcifier.visitJumpInsn(opcode, label);
         super.visitJumpInsn(opcode, label);
     }
 
     @Override
     public void visitLdcInsn(Object cst) {
         injectLineNumber();
-        textifier.visitLdcInsn(cst);
+        sourcifier.visitLdcInsn(cst);
         super.visitLdcInsn(cst);
     }
 
     @Override
     public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels) {
         injectLineNumber();
-        textifier.visitLookupSwitchInsn(dflt, keys, labels);
+        sourcifier.visitLookupSwitchInsn(dflt, keys, labels);
         super.visitLookupSwitchInsn(dflt, keys, labels);
     }
 
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
         injectLineNumber();
-        textifier.visitMethodInsn(opcode, owner, name, desc, itf);
+        sourcifier.visitMethodInsn(opcode, owner, name, desc, itf);
         super.visitMethodInsn(opcode, owner, name, desc, itf);
     }
 
@@ -113,48 +112,48 @@ public class BareMetalMethodVisitor extends MethodVisitor {
     @Deprecated
     public void visitMethodInsn(int opcode, String owner, String name, String desc) {
         injectLineNumber();
-        textifier.visitMethodInsn(opcode, owner, name, desc);
+        sourcifier.visitMethodInsn(opcode, owner, name, desc);
         super.visitMethodInsn(opcode, owner, name, desc);
     }
 
     @Override
     public void visitMultiANewArrayInsn(String desc, int dims) {
         injectLineNumber();
-        textifier.visitMultiANewArrayInsn(desc, dims);
+        sourcifier.visitMultiANewArrayInsn(desc, dims);
         super.visitMultiANewArrayInsn(desc, dims);
     }
 
     @Override
     public void visitTableSwitchInsn(int min, int max, Label dflt, Label... labels) {
         injectLineNumber();
-        textifier.visitTableSwitchInsn(min, max, dflt, labels);
+        sourcifier.visitTableSwitchInsn(min, max, dflt, labels);
         super.visitTableSwitchInsn(min, max, dflt, labels);
     }
 
     @Override
     public void visitTypeInsn(int opcode, String type) {
         injectLineNumber();
-        textifier.visitTypeInsn(opcode, type);
+        sourcifier.visitTypeInsn(opcode, type);
         super.visitTypeInsn(opcode, type);
     }
 
     @Override
     public void visitVarInsn(int opcode, int var) {
         injectLineNumber();
-        textifier.visitVarInsn(opcode, var);
+        sourcifier.visitVarInsn(opcode, var);
         super.visitVarInsn(opcode, var);
     }
 
     @Override
     public void visitEnd() {
-        textifier.visitMethodEnd();
+        sourcifier.visitMethodEnd();
         super.visitEnd();
     }
 
     private void injectLineNumber() {
         Label l = new Label();
         super.visitLabel(l);
-        int len = countLines(textifier.getText());
+        int len = countLines(sourcifier.getText());
 
         super.visitLineNumber(len + 1, l);
     }
