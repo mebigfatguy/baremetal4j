@@ -223,8 +223,8 @@ public class Sourcifier {
     }
 
     public void visitMultiANewArrayInsn(String desc, int dims) {
-        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[Opcodes.MULTIANEWARRAY] + "??");
-        byteOffset += 1;
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[Opcodes.MULTIANEWARRAY] + " " + desc + ", " + dims);
+        byteOffset += 4;
     }
 
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
