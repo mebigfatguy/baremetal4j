@@ -19,7 +19,9 @@ package com.mebigfatguy.baremetal4j;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Handle;
@@ -28,6 +30,18 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.util.Printer;
 
 public class Sourcifier {
+
+    private static final Map<Character, String> sigToType = new HashMap<>();
+    static {
+        sigToType.put('V', "void");
+        sigToType.put('Z', "boolean");
+        sigToType.put('B', "byte");
+        sigToType.put('S', "short");
+        sigToType.put('I', "int");
+        sigToType.put('J', "long");
+        sigToType.put('F', "float");
+        sigToType.put('D', "double");
+    }
 
     private List<String> lines = new ArrayList<>();
     private int byteOffset = 0;
@@ -83,7 +97,7 @@ public class Sourcifier {
     }
 
     public Sourcifier visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        lines.add("\t" + accessString(access) + " name() {");
+        lines.add("\t" + accessString(access) + " " + methodReturnType(desc) + " name" + argumentSignature(desc) + " {");
         lines.add("");
         lines.add("\t\tint BCO; // Byte Code Offset");
         byteOffset = 0;
@@ -144,14 +158,18 @@ public class Sourcifier {
     }
 
     public void visitInsn(int opcode) {
-        lines.add("\t\tBCO = " + byteOffset + "; //" + Printer.OPCODES[opcode]);
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; //" + Printer.OPCODES[opcode]);
         byteOffset++;
     }
 
     public void visitIntInsn(int opcode, int operand) {
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; //" + Printer.OPCODES[opcode] + " " + operand);
+        byteOffset += (opcode == Opcodes.SIPUSH) ? 3 : 2;
     }
 
     public void visitVarInsn(int opcode, int var) {
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; //" + Printer.OPCODES[opcode] + " " + var);
+        byteOffset += 2;
     }
 
     public void visitTypeInsn(int opcode, String type) {
@@ -228,5 +246,55 @@ public class Sourcifier {
         }
 
         return sb.toString();
+    }
+
+    private String methodReturnType(String signature) {
+        int rParenPos = signature.indexOf(')');
+
+        StringBuilder returnSig = new StringBuilder(signature.substring(rParenPos + 1));
+
+        return convertInternalType(returnSig);
+    }
+
+    private String argumentSignature(String signature) {
+
+        int lParen = signature.indexOf('(');
+        int rParen = signature.lastIndexOf(')');
+
+        StringBuilder returnSig = new StringBuilder(signature.substring(lParen + 1, rParen));
+
+        StringBuilder returnType = new StringBuilder("(");
+        String separator = "";
+        while (returnSig.length() > 0) {
+            returnType.append(separator).append(convertInternalType(returnSig));
+            separator = ", ";
+        }
+
+        returnType.append(")");
+        return returnType.toString();
+    }
+
+    private String convertInternalType(StringBuilder internalType) {
+
+        if (internalType.charAt(0) == 'L') {
+            int semiPos = internalType.indexOf(";");
+            String type = internalType.substring(1, semiPos).replace('/', '.');
+            internalType.delete(0, semiPos + 1);
+            return type;
+        }
+
+        String returnType = sigToType.get(internalType.charAt(0));
+        if (returnType != null) {
+            internalType.delete(0, 1);
+            return returnType;
+        }
+
+        if (internalType.charAt(0) == '[') {
+            internalType.delete(0, 1);
+            returnType = convertInternalType(internalType);
+            return returnType + "[]";
+        }
+
+        return "";
     }
 }
