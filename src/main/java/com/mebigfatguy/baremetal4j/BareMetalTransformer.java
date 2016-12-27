@@ -43,16 +43,24 @@ public class BareMetalTransformer implements ClassFileTransformer {
             return classfileBuffer;
         }
 
-        ClassReader cr = new ClassReader(classfileBuffer);
-        ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-        BareMetalClassVisitor stackTraceVisitor = new BareMetalClassVisitor(cw, options);
-        cr.accept(stackTraceVisitor, ClassReader.EXPAND_FRAMES);
+        try {
 
-        byte[] transformedClass = cw.toByteArray();
+            ClassReader cr = new ClassReader(classfileBuffer);
+            ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+            BareMetalClassVisitor stackTraceVisitor = new BareMetalClassVisitor(cw, options);
+            cr.accept(stackTraceVisitor, ClassReader.EXPAND_FRAMES);
 
-        // dumpGeneratedClassFile(transformedClass, "/tmp/" + className + ".class");
+            byte[] transformedClass = cw.toByteArray();
 
-        return transformedClass;
+            // dumpGeneratedClassFile(transformedClass, "/tmp/" + className + ".class");
+
+            return transformedClass;
+        } catch (Exception e) {
+            e.printStackTrace();
+            IllegalClassFormatException icfe = new IllegalClassFormatException("Failed instrumenting class " + className);
+            icfe.initCause(e);
+            throw icfe;
+        }
     }
 
     private void dumpGeneratedClassFile(byte[] transformedClass, String name) {
