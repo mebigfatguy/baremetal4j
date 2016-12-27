@@ -45,6 +45,7 @@ public class Sourcifier {
 
     private List<String> lines = new ArrayList<>();
     private int byteOffset = 0;
+    private String className;
 
     public int currentLine() {
         return lines.size() + 1;
@@ -59,7 +60,6 @@ public class Sourcifier {
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
 
         String packageName;
-        String className;
         int lastSlash = name.lastIndexOf('/');
         if (lastSlash >= 0) {
             packageName = name.substring(0, lastSlash).replace('/', '.');
@@ -97,10 +97,17 @@ public class Sourcifier {
     }
 
     public Sourcifier visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        lines.add("\t" + accessString(access) + " " + methodReturnType(desc) + " " + name + argumentSignature(desc) + " {");
-        lines.add("");
-        lines.add("\t\tint BCO; // Byte Code Offset");
-        byteOffset = 0;
+        if ("<clinit>".equals(name)) {
+            lines.add("\tstatic {");
+        } else {
+            if ("<init>".equals(name)) {
+                name = className;
+            }
+            lines.add("\t" + accessString(access) + " " + methodReturnType(desc) + " " + name + argumentSignature(desc) + " {");
+            lines.add("");
+            lines.add("\t\tint BCO; // Byte Code Offset");
+            byteOffset = 0;
+        }
         return this;
     }
 
@@ -175,7 +182,7 @@ public class Sourcifier {
     }
 
     public void visitTypeInsn(int opcode, String type) {
-        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode] + " " + convertInternalType(new StringBuilder(type)));
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode] + " " + type.replace('/', '.'));
         byteOffset += 3;
 
     }
