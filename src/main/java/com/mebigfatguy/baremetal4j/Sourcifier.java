@@ -168,8 +168,10 @@ public class Sourcifier {
     }
 
     public void visitVarInsn(int opcode, int var) {
-        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode] + " " + var);
-        byteOffset += 2;
+        boolean isShortForm = var <= 3;
+
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode] + (isShortForm ? "_" : " ") + var);
+        byteOffset += isShortForm ? 1 : 2;
     }
 
     public void visitTypeInsn(int opcode, String type) {
