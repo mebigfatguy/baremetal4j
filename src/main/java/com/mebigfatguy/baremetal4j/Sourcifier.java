@@ -205,7 +205,7 @@ public class Sourcifier {
     }
 
     public void visitJumpInsn(int opcode, Label label) {
-        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode] + " OFFSET[" + label.getOffset() + "]");
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode]);
         byteOffset += 3;
     }
 
