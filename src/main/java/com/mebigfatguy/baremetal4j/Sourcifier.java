@@ -188,7 +188,7 @@ public class Sourcifier {
     public void visitMethodInsn(final int opcode, final String owner, final String name, final String desc, final boolean itf) {
         lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[opcode] + " " + owner.replace('/', '.') + "." + name
                 + argumentSignature(desc) + " ===> " + methodReturnType(desc));
-        byteOffset += 1;
+        byteOffset += 3;
     }
 
     public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
