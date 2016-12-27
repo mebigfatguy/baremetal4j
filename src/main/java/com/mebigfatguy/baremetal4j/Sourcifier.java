@@ -192,7 +192,8 @@ public class Sourcifier {
     }
 
     public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
-        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[Opcodes.LDC] + "??");
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[Opcodes.INVOKEDYNAMIC] + " " + name + argumentSignature(desc)
+                + " ===> " + methodReturnType(desc));
         byteOffset += 1;
     }
 
@@ -215,12 +216,12 @@ public class Sourcifier {
     }
 
     public void visitTableSwitchInsn(int min, int max, Label dflt, Label... labels) {
-        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + "??");
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[Opcodes.TABLESWITCH]);
         byteOffset += 1;
     }
 
     public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels) {
-        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + "??");
+        lines.add("\t\tBCO = " + String.format("%05d", byteOffset) + "; // " + Printer.OPCODES[Opcodes.LOOKUPSWITCH]);
         byteOffset += 1;
     }
 
